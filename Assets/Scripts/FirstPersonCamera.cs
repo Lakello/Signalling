@@ -10,6 +10,8 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField] private float _xRotation;
     [SerializeField] private float _yRotation;
 
+    private float limitRotation = 90f;
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -24,7 +26,7 @@ public class FirstPersonCamera : MonoBehaviour
         _yRotation += mouseX;
         _xRotation -= mouseY;
 
-        _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
+        _xRotation = Mathf.Clamp(_xRotation, -limitRotation, limitRotation);
 
         transform.rotation = Quaternion.Euler(_xRotation, _yRotation, 0);
         _player.rotation = Quaternion.Euler(0, _yRotation, 0);
