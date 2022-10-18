@@ -16,21 +16,6 @@ public class SignallingReaction : MonoBehaviour
     private bool _isInvasion;
     private Coroutine _changeVolumeSmoothlyCoroutine;
 
-    private IEnumerator ChangeVolumeSmoothly(float target)
-    {
-        while (_audioSource.volume != target)
-        {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, target, _multiplierDelta * Time.deltaTime);
-
-            yield return null;
-        }
-
-        if (_isInvasion == false)
-        {
-            _onStopAudio?.Invoke();
-        }
-    }
-
     public void OnInvasion(bool isInvasion)
     {
         _isInvasion = isInvasion;
@@ -52,6 +37,21 @@ public class SignallingReaction : MonoBehaviour
         else
         {
             _changeVolumeSmoothlyCoroutine = StartCoroutine(ChangeVolumeSmoothly(_minVolume));
+        }
+    }
+
+    private IEnumerator ChangeVolumeSmoothly(float target)
+    {
+        while (_audioSource.volume != target)
+        {
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, target, _multiplierDelta * Time.deltaTime);
+
+            yield return null;
+        }
+
+        if (_isInvasion == false)
+        {
+            _onStopAudio?.Invoke();
         }
     }
 }
