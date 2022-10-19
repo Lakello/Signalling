@@ -20,9 +20,16 @@ public class SignallingReaction : MonoBehaviour
     {
         _isInvasion = isInvasion;
 
+        float target;
+
         if (_isInvasion)
         {
             _onPlayAudio?.Invoke();
+            target = _maxVolume;
+        }
+        else
+        {
+            target = _minVolume;
         }
 
         if (_changeVolumeSmoothlyCoroutine != null)
@@ -30,13 +37,11 @@ public class SignallingReaction : MonoBehaviour
             StopCoroutine(_changeVolumeSmoothlyCoroutine);
         }
 
-        _changeVolumeSmoothlyCoroutine = StartCoroutine(ChangeVolumeSmoothly());
+        _changeVolumeSmoothlyCoroutine = StartCoroutine(ChangeVolumeSmoothly(target));
     }
 
-    private IEnumerator ChangeVolumeSmoothly()
+    private IEnumerator ChangeVolumeSmoothly(float target)
     {
-        float target = _audioSource.volume == 0 ? _maxVolume : _minVolume;
-
         while (_audioSource.volume != target)
         {
             _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, target, _multiplierDelta * Time.deltaTime);
